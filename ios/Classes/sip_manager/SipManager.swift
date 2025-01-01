@@ -121,7 +121,7 @@ class SipManager {
                 //                    self.sendEvent(withName: "AudioDevicesChanged", body: ["audioOutputType": audioOutputType])
                 //                },
                 onAccountRegistrationStateChanged: { (core: Core, account: Account, state: RegistrationState, message: String) in
-                    self.sendEvent(eventName: EventAccountRegistrationStateChanged, body: ["registrationState": RegisterSipState.allCases[state.rawValue].rawValue, "message": message])
+                    self.sendEvent(eventName: EventAccountRegistrationStateChanged, body: ["registrationState": state.rawValue >= RegisterSipState.allCases.count ? RegisterSipState.Failed.rawValue : RegisterSipState.allCases[state.rawValue].rawValue, "message": message])
                 }
             )
         } catch {
