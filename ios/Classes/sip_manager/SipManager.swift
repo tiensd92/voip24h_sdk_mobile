@@ -114,7 +114,7 @@ class SipManager {
                 },
                 //                onAudioDevicesListUpdated: { (core: Core) in
                 //                    let currentAudioDeviceType = core.currentCall?.outputAudioDevice?.type
-                //                    if(currentAudioDeviceType != AudioDeviceType.Speaker && currentAudioDeviceType != AudioDeviceType.Earpiece) {
+                //                    if(currentAudioDeviceType != AudioDevice.Kind.Speaker && currentAudioDeviceType != AudioDevice.Kind.Earpiece) {
                 //                        return
                 //                    }
                 //                    let audioOutputType = AudioOutputType.allCases[currentAudioDeviceType!.rawValue].rawValue
@@ -423,7 +423,7 @@ class SipManager {
             return result(FlutterError(code: "404", message: "Current call not found", details: nil))
         }
         let currentAudioDevice = coreCall!.outputAudioDevice
-        let speakerEnabled = currentAudioDevice?.type == AudioDeviceType.Speaker
+        let speakerEnabled = currentAudioDevice?.type == AudioDevice.Kind.Speaker
         
         // We can get a list of all available audio devices using
         // Note that on tablets for example, there may be no Earpiece device
@@ -431,10 +431,10 @@ class SipManager {
             // For IOS, the Speaker is an exception, Linphone cannot differentiate Input and Output.
             // This means that the default output device, the earpiece, is paired with the default phone microphone.
             // Setting the output audio device to the microphone will redirect the sound to the earpiece.
-            if (speakerEnabled && audioDevice.type == AudioDeviceType.Microphone) {
+            if (speakerEnabled && audioDevice.type == AudioDevice.Kind.Microphone) {
                 coreCall!.outputAudioDevice = audioDevice
                 return result(false)
-            } else if (!speakerEnabled && audioDevice.type == AudioDeviceType.Speaker) {
+            } else if (!speakerEnabled && audioDevice.type == AudioDevice.Kind.Speaker) {
                 coreCall!.outputAudioDevice = audioDevice
                 return result(true)
             }
@@ -517,7 +517,7 @@ class SipManager {
     
     func isSpeakerEnabled(result: FlutterResult) {
         let currentAudioDevice = mCore.currentCall?.outputAudioDevice
-        let speakerEnabled = currentAudioDevice?.type == AudioDeviceType.Speaker
+        let speakerEnabled = currentAudioDevice?.type == AudioDevice.Kind.Speaker
         result(speakerEnabled)
     }
     
