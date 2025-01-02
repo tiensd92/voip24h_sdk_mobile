@@ -147,15 +147,17 @@ class SipManager {
         SwiftVoip24hSdkMobilePlugin.eventSink?(data)
     }
     
-    public func initSipModule(sipConfiguration: SipConfiguaration) {
+    public func initSipModule(sipConfiguration: SipConfiguaration, result: FlutterResult) {
         do {
             mCore.keepAliveEnabled = sipConfiguration.isKeepAlive
             try mCore.start()
             mCore.removeDelegate(delegate: coreDelegate)
             mCore.addDelegate(delegate: coreDelegate)
             initSipAccount(ext: sipConfiguration.ext, password: sipConfiguration.password, domain: sipConfiguration.domain, port: sipConfiguration.port, transportType: sipConfiguration.toLpTransportType())
+            result(true)
         } catch {
             NSLog(error.localizedDescription)
+            result(FlutterError(code: "500", message: error.localizedDescription, details: nil))
         }
     }
     
